@@ -58,7 +58,7 @@ paths:
       parameters:
         - $ref: '#/parameters/offset'
         - $ref: '#/parameters/limit'
-        - $ref: '#/parameters/status' # TODO: define the parameter in the appropriate section
+        # - $ref: '#/parameters/status' # TODO: define the parameter in the appropriate section
       responses:
         200:
           description: The list of Products
@@ -149,7 +149,7 @@ paths:
     get:
       summary: List product reviews
       description: Retrieve a list of product reviews
-      parameters:parameters:
+      parameters:
         - $ref: '#/parameters/offset'
         - $ref: '#/parameters/limit'
       responses:
@@ -191,7 +191,7 @@ paths:
     get:
       summary: List product reviews stats
       description: Retrieve a list of product reviews statistics
-      parameters:parameters:
+      parameters:
         - $ref: '#/parameters/offset'
         - $ref: '#/parameters/limit'
         - name: granularity
@@ -377,7 +377,9 @@ parameters:
       - prices
       - assets
 
-  # TODO: define the status parameter
+  # TODO: define the 'status' parameter
+  # status:
+  #   name: status
 
 definitions:
   #
@@ -486,6 +488,257 @@ definitions:
       detail: 'Cannot find the requested product'
       status: 404
       instance: '/products/1234'
+
+  # Reviews list
+  halReviews:
+    type: object
+    properties:
+      reviewCount:
+        type: number
+      averageRating:
+        type: number
+    allOf:
+      - $ref: '#/definitions/halResource'
+    example:
+      _links:
+        self:
+          href: /products/{productId}/reviews
+          templated: true
+
+        create:
+          href: /products/{productId}/reviews
+          templated: true
+
+        next:
+          href: /products/{productId}/reviews?offset=5&limit=5
+          templated: true
+
+        first:
+          href: /products/{productId}/reviews?offset=0&limit=5
+          templated: true
+
+        last:
+          href: /products/{productId}/reviews?offset=40&limit=5
+          templated: true
+
+      _embedded:
+        reviewCount: 122
+        averageRating: 4.3
+        review:
+          - $ref: '#/definitions/halReview/example'
+
+  # Review body
+  review:
+    type: object
+    properties:
+      id:
+        type: string
+      comment:
+        type: string
+      rating:
+        type: number
+      createdAt:
+        type: string
+    required:
+      - comment
+      - rating
+    example:
+      id: 'DB1124'
+      comment: 'This is a review comment example'
+      rating: 4.3
+      createdAt: '2017-06-21T14:07:17Z'
+
+  # HAL Single review
+  halReview:
+    type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+      - $ref: '#/definitions/review'
+    example:
+      _links:
+        self:
+          href: /products/{productId}/reviews
+          templated: true
+      id: 'DB1124'
+      comment: 'This is a review comment example'
+      rating: 4.3
+      createdAt: '2017-06-21T14:07:17Z'
+
+  # Review Stats Resource
+  halReviewsStats:
+    type: object
+    properties:
+      reviewCount:
+        type: number
+      averageRating:
+        type: number
+    allOf:
+      - $ref: '#/definitions/halResource'
+    example:
+      _links:
+        self:
+          href: /products/{productId}/reviews-stats
+          templated: true
+
+        next:
+          href: /products/{productId}/reviews-stats?offset=5&limit=5
+          templated: true
+
+        first:
+          href: /products/{productId}/reviews-stats?offset=0&limit=5
+          templated: true
+
+        last:
+          href: /products/{productId}/reviews-stats?offset=40&limit=5
+          templated: true
+
+      _embedded:
+        reviewCount: 122
+        averageRating: 4.3
+        history:
+          - $ref: '#/definitions/halReviewStatsItem'
+
+  # HAL Wrapper
+  halReviewStatsItem:
+    type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+      - $ref: '#/definitions/reviewStatsItem'
+    example:
+      date: '2017-06-21T14:07:17Z'
+      rating: 4.3
+
+  # Review Stats
+  reviewStatsItem:
+    type: object
+    properties:
+      id:
+        type: string
+      comment:
+        type: string
+      rating:
+        type: number
+      createdAt:
+        type: string
+        readOnly: true
+    required:
+      - comment
+      - rating
+    example:
+      id: 'DB1124'
+      comment: 'This is a review comment example'
+      rating: 4.3
+      createdAt: '2017-06-21T14:07:17Z'
+
+  # HAL Wrapper
+  halUser:
+    type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+      - $ref: '#/definitions/user'
+    example:
+      _links:
+        self:
+          href: /users/{userId}
+          templated: true
+      id: '232333'
+      username: 'Sam'
+      createdAt: '2017-06-21T14:07:17Z'
+
+  # Review
+  user:
+    type: object
+    properties:
+      id:
+        type: string
+      username:
+        type: string
+      password:
+        type: string
+      createdAt:
+        type: string
+    required:
+      - username
+      - password
+    example:
+      id: '232333'
+      username: 'Sam'
+      createdAt: '2017-06-21T14:07:17Z'
+
+  # User Not Found Error
+  userNotFound:
+    type: object
+    allOf:
+      - $ref: '#/definitions/problemDetail'
+    example:
+      title: 'Not Found'
+      detail: 'Cannot find any user with this id'
+      status: 404
+      instance: '/users/{userId}'
+
+  halWishlist:
+    type: object
+    properties:
+      wishlistCount:
+        type: number
+    allOf:
+      - $ref: '#/definitions/halResource'
+    example:
+      _links:
+        self:
+          href: /users/{userId}/wishlist
+          templated: true
+
+        create:
+          href: /users/{userId}/wishlist
+          templated: true
+
+        next:
+          href: /users/{userId}/wishlist?offset=5&limit=5
+          templated: true
+
+        first:
+          href: /users/{userId}/wishlist?offset=0&limit=5
+          templated: true
+
+        last:
+          href: /users/{userId}/wishlist?offset=40&limit=5
+          templated: true
+
+      _embedded:
+        wishlistCount: 122
+        wishlist:
+          - $ref: '#/definitions/halWishProduct/example'
+
+  # HAL Wrapper
+  halWishProduct:
+    type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+      - $ref: '#/definitions/wishProduct'
+    example:
+      _links:
+        self:
+          href: /products/{productId}
+          templated: true
+      id: 'DB1124'
+      createdAt: '2017-06-21T14:07:17Z'
+
+
+  # Review
+  wishProduct:
+    type: object
+    properties:
+      id:
+        type: string
+      createdAt:
+        type: string
+        readOnly: true
+    required:
+      - id
+    example:
+      id: 'DB1124'
+      createdAt: '2017-06-21T14:07:17Z'
 
   #
   # -- DO NOT EDIT BEYOND THIS POINT --
