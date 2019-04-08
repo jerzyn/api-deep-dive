@@ -134,200 +134,29 @@ paths:
       responses:
         204:
           description: The Product was deleted
-          
-  /products/{productId}/reviews:
-
-    x-summary: List of Product Reviews
-
-    parameters:
-      - name: productId
-        in: path
-        description: Id of the Product
-        required: true
-        type: string
-        x-example: 'DB1124'
-
-    get:
-      summary: List product reviews
-      description: Retrieve a list of product reviews
-      parameters:
-        - $ref: '#/parameters/offset'
-        - $ref: '#/parameters/limit'
-      responses:
-        200:
-          description: The list of Product review
-          schema:
-            $ref: '#/definitions/halReviews'
-
-    post:
-      summary: Create product review
-      description: Create a new product review
-      consumes:
-        - application/json
-      parameters:
-        - name: Review
-          in: body
-          description: Review to be created
-          required: true
-          schema:
-            $ref: '#/definitions/review'
-      responses:
-        201:
-          description: Newly created product
-          schema:
-            $ref: '#/definitions/halReview'
-
-  /products/{productId}/reviews-stats:
-
-    x-summary: List of Product Reviews Stats
-
-    parameters:
-      - name: productId
-        in: path
-        description: Id of the Product
-        required: true
-        type: string
-        x-example: 'DB1124'
-
-    get:
-      summary: List product reviews stats
-      description: Retrieve a list of product reviews statistics
-      parameters:
-        - $ref: '#/parameters/offset'
-        - $ref: '#/parameters/limit'
-        - name: granularity
-          in: query
-          type: string
-          enum:
-            - years
-            - months
-            - days
-          default: months
-      responses:
-        200:
-          description: The list of Product review
-          schema:
-            $ref: '#/definitions/halReviewsStats'
-
-    # Add API definition for user creation. It should be a POST action consuming a JSON object user defined in the definitions at the bottom of this file. It should repond with 201 Created for a successful action. Don't forget about the oauth scopes. this one should allow to create new users.
-    # -------------------------------------------------------------------------------------------
-    # post:
-    #   summary: Create a New User
-
-  /users:
-    x-summary: Users
-
-    post:
-      summary: New user
-      description: Create a new user
-      consumes:
-        - application/json
-      parameters:
-        - name: User
-          in: body
-          description: User to be created
-          required: true
-          schema:
-            $ref: '#/definitions/user'
-      responses:
-        201:
-          description: Newly created user
-          schema:
-            $ref: '#/definitions/halUser'
   
-    # This endpoint will require a parameter in it's path. Please define this parameter below. Remember, that the parameter's name has to relate to the one put in the path above. Don't forget about setting its type.
-    # -------------------------------------------------------------------------------------------
-    # parameters:
+  # Add a product review endpoint. This endpoint will have:
+  #  - a method to retrieve a list of product reviews which can be filtered by the pagination offset and a nummber of items per page
+  #  - a method to create a product review which will accept a review as a parameter
+  # Please reuse the defined parameters and object models.
+  # Remember, that the HTTP code for creating and retrieving resources is different. Also take into account fact, that certain user information is created on the server side after receiving user data. What is the implication of that?
+  # -------------------------------------------------------------------------------------------
+  # /products/{productId}/reviews:
 
-  /users/{userId}:
-    x-summary: User Profile
-
-    parameters:
-      - name: userId
-        in: path
-        description: Id of the User
-        required: true
-        type: string
-        x-example: 'xxxxx'
-
-    get:
-      summary: User Profile
-      description: Retrieve user profile details
-      responses:
-        200:
-          description: A particular User Profile
-          schema:
-            $ref: '#/definitions/halUser'
-
-  /users/{userId}/wishlist:
-    x-summary: User Wishlist
-
-    parameters:
-      - name: userId
-        in: path
-        description: Id of the User
-        required: true
-        type: string
-        x-example: '32312'
-
-    get:
-      summary: User Wishlist
-      description: Retrieve user wishlist
-      responses:
-        200:
-          description: A particular User Wishlist
-          schema:
-            $ref: '#/definitions/halWishlist'
-          
-    delete:
-      summary: Clear user wishlist
-      description: Clear all the products from user wishlist
-      responses:
-        204:
-          description: Wishlist cleared
-
-  /users/{userId}/wishlist/{productId}:
-    x-summary: User Product Wishlist
-
-    parameters:
-      - name: userId
-        in: path
-        description: Id of the User
-        required: true
-        type: string
-        x-example: '32312'
-
-      - name: productId
-        in: path
-        description: Id of the Product
-        required: true
-        type: string
-        x-example: 'DB1124'
-
-    post:
-      summary: Add product to the wishlist
-      description: Add a product to user wishlist
-      consumes:
-        - application/json
-      parameters:
-        - name: Wishlist
-          in: body
-          description: Wishlist to be added
-          required: true
-          schema:
-            $ref: '#/definitions/wishProduct'
-      responses:
-        201:
-          description: Newly add Wishlist
-          schema:
-            $ref: '#/definitions/halWishProduct'
-        
-    delete:
-      summary: Delete a product from the wishlist
-      description: Delete a product from user wishlist
-      responses:
-        204:
-          description: Wishlist cleared
+  # Add a new API definition for collection of users. This collection will allow to add a new item into it. The user data is a JSON object. 
+  # -------------------------------------------------------------------------------------------
+  # /users:
+  
+  # Add a new endpoint for operations on a specific user. This endpoint will require a parameter in it's path. Please define this parameter below. Remember, that the parameter's name has to relate to the one put in the path above. Don't forget about setting its type.
+  # This endpoint will allow to retrieve specific user's information. User's data is immutable and permanent.
+  # -------------------------------------------------------------------------------------------
+  # /users/{userId}:
+  
+  # Add an endpoint for operations on a user's wishlist. The operations allowed are retrieving the wishlist, clearing it, adding a new product on the list and deleting a specific product from it. 
+  # Is this going to be one endpoint, two or more? 
+  # How are you going to clear the wishlist?
+  # Remember, that you already have a list of products. Wishlist should contain only the products already defined. 
+  # -------------------------------------------------------------------------------------------
 
 parameters:
   # adidas API guidelines: Pagination
