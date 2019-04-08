@@ -8,47 +8,21 @@
 - Code editor (e.g. [VS Studio Code](https://code.visualstudio.com))
 - [Apiary](https://apiary.io) account within adidas group.
 
-<!-- Docker  -->
-
-
 ## Setup
 
 1. Fork this repo and pull in your local machine
 
-2. Edit and check the swagger file `swagger.yaml`
-
-<!-- 3. Build the api image
-
-This is only needed if you want to try the implementation of the designed API + API contract testing
-
-```
-make build
-```
-
-4. Run the API
-
-```
-make run
-``` -->
-
+2. Open and check the swagger file `sample-api.yaml`
 
 ## Design challenge
 
-As a new assignement you are asked to add a wishlist feature to our adidas ecom (website, native apps).
+As a new assignement you are asked to write an API contract basing on a the list of affordances given. You will be basing on a sample api description following adidas API guidelines and a number of predefined object models.
 
-You've decided wisly to think [API First](https://adidas.gitbook.io/api-guidelines/general-guidelines/api-first) and [API Design First](https://adidas.gitbook.io/api-guidelines/rest-api-guidelines/core-principles/design-maturity).
+Your team decided wisly to think [API First](https://adidas.gitbook.io/api-guidelines/general-guidelines/api-first) and [API Design First](https://adidas.gitbook.io/api-guidelines/rest-api-guidelines/core-principles/design-maturity).
 
-You've assigned 4 user stories:
+## API affordances (actions)
 
-- As a user, I want to add a product in my wishlist
-- As a user, I want to retrieve my wishlist
-- As a user, I want to delete a specific product from mt wishlist
-- As a user, I want to clear my wishlist
-
-
-## Existing affordances (actions)
-
-The existing core Product API privides this affordances:
+The existing core Product API provides this affordances:
 
 - Retrieve the list of products
 - Retrieve a single product
