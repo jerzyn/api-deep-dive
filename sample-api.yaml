@@ -134,6 +134,7 @@ paths:
       responses:
         204:
           description: The Product was deleted
+          
   /products/{productId}/reviews:
 
     x-summary: List of Product Reviews
