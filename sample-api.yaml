@@ -21,6 +21,8 @@ info:
     - Delete a specific product from the wishlist
     - Clear the wishlist
 
+# Add contact information. Refer to the OpenAPI Specification for version 2.0 (https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
+
 produces:
   - application/hal+json      # Representation message format
   - application/problem+json  # Error message format
@@ -74,6 +76,7 @@ paths:
           in: body
           description: Product to be created
           required: true
+          # Go to line 343 to define the product object model. Read the comments there are use other models as examples.
           schema:
             $ref: '#/definitions/product'
       responses:
