@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
-  version: '2.0.0'
-  title: "Just A Humble Evangelist Test"
+  version: '3.0.0'
+  title: "API Workshop - Deep Dive"
   description: |
     A Simple adidas product API for the On-Boarding hackathon.
     [On-Boarding trainings](https://tools.adidas-group.com/confluence/display/DSBP/Engineers+On-Boarding+trainings) hackathon
