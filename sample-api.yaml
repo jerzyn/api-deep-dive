@@ -254,7 +254,7 @@ parameters:
       - prices
       - assets
 
-  # TODO: define the 'status' parameter
+  # TODO: define the 'status' parameter. Follow examples above
   # status:
   #   name: status
 
@@ -338,22 +338,10 @@ definitions:
       status: unavailable
 
   # Product
-  product:
-    type: object
-    properties:
-      productNumber:
-        type: number
-      itemCount:
-        type: number
-      status:
-        type: string
-    required:
-      - productNumber
-      - itemCount
-    example:
-      productNumber: 42
-      itemCount: 3
-      status: available
+  # Define the product object. This object has 6 properties: title, description, category, image, status and tags. The first 4 are simple strings. Status is a string which can have one of 3 values: available, pending, sold and out. Tags is an arrays of strings. Title, description and category are requiered parameters.
+  # Extra task - try adding an example. This will be handy for mocking later.
+  # product:
+  # --------------------------------------------------------------------------
 
   # Product Not Found Error
   productNotFound:
@@ -408,26 +396,25 @@ definitions:
   review:
     type: object
     properties:
-      id:
-        type: string
       comment:
         type: string
       rating:
         type: number
-      createdAt:
-        type: string
     required:
       - comment
       - rating
     example:
-      id: 'DB1124'
       comment: 'This is a review comment example'
       rating: 4.3
-      createdAt: '2017-06-21T14:07:17Z'
 
   # HAL Single review
   halReview:
     type: object
+    properties:      
+      id:
+        type: string
+      createdAt:
+        type: string
     allOf:
       - $ref: '#/definitions/halResource'
       - $ref: '#/definitions/review'
@@ -489,27 +476,25 @@ definitions:
   reviewStatsItem:
     type: object
     properties:
-      id:
-        type: string
       comment:
         type: string
       rating:
         type: number
-      createdAt:
-        type: string
-        readOnly: true
     required:
       - comment
       - rating
     example:
-      id: 'DB1124'
       comment: 'This is a review comment example'
       rating: 4.3
-      createdAt: '2017-06-21T14:07:17Z'
 
   # HAL Wrapper
   halUser:
     type: object
+    properties:
+      createdAt:
+          type: string
+      id: 
+          type: string
     allOf:
       - $ref: '#/definitions/halResource'
       - $ref: '#/definitions/user'
@@ -526,21 +511,16 @@ definitions:
   user:
     type: object
     properties:
-      id:
-        type: string
       username:
         type: string
       password:
-        type: string
-      createdAt:
         type: string
     required:
       - username
       - password
     example:
-      id: '232333'
       username: 'Sam'
-      createdAt: '2017-06-21T14:07:17Z'
+      password: 'adidas123'
 
   # User Not Found Error
   userNotFound:
