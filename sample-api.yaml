@@ -143,6 +143,53 @@ paths:
   # -------------------------------------------------------------------------------------------
   # /products/{productId}/reviews:
 
+  
+  # -------------------------------------------------------------------------------------------
+  /products/{product_id}/reviews-stats:
+
+    x-summary: List of Product Reviews Stats
+
+    parameters:
+      - name: product_id
+        in: path
+        description: Id of the Product
+        required: true
+        type: string
+        x-example: 'DB1124'
+
+    get:
+      summary: List product reviews stats
+      description: Retrieve a list of product reviews statistics
+      parameters:
+        - name: offset
+          in: query
+          description: Number of results to skip from the start of the list
+          required: false
+          type: string
+          default: '0'
+          x-example: '10'
+        - name: limit
+          in: query
+          description: The maximum number of reusults to return
+          required: false
+          type: string
+          default: '10'
+          x-example: '5'
+        - name: granularity
+          in: query
+          type: string
+          enum:
+            - years
+            - months
+            - days
+          default: months
+      responses:
+        200:
+          description: The list of Product review
+          schema:
+            $ref: '#/definitions/halReviewsStats'
+  # -------------------------------------------------------------------------------------------
+
   # Add a new API definition for collection of users. This collection will allow to add a new item into it. The user data is a JSON object. 
   # -------------------------------------------------------------------------------------------
   # /users:
