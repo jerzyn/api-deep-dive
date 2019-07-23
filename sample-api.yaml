@@ -37,29 +37,6 @@ host: "example.com"
 schemes:
   - https
 
-securityDefinitions:
-  oauth2:
-    type: oauth2
-    authorizationUrl: 'http://example/oauth'
-    description: |
-
-      There are three available roles in the application:
-
-        - Anonymous -> can log in, log out, see products, see general ratings from a product.
-        - User -> all from Anonymous + following scopes: write:wishlist, read:reviews, write:reviews.
-        - Admin -> all from Anonymous + following scopes: write:products, read:reviews, read:reviews:stats, read:users, write:users.
-    flow: implicit
-    scopes:
-      'read:products': read all products 
-      'write:products': modify products      
-      'write:wishlist': modify your wishlist
-      'read:wishlist': read your wishlist
-      'read:reviews': read all reviews
-      'write:reviews': write reviews
-      'read:reviews:stats': read review statistics
-      'read:users': read users
-      'write:users': modify users
-
 paths:
   /:
     x-summary: Wishlist
@@ -301,3 +278,26 @@ paths:
       security:
         - oauth2:
           - 'write:wishlist'
+
+securityDefinitions:
+  oauth2:
+    type: oauth2
+    authorizationUrl: 'http://example/oauth'
+    description: |
+
+      There are three available roles in the application:
+
+        - Anonymous -> can log in, log out, see products, see general ratings from a product.
+        - User -> all from Anonymous + following scopes: write:wishlist, read:reviews, write:reviews.
+        - Admin -> all from Anonymous + following scopes: write:products, read:reviews, read:reviews:stats, read:users, write:users.
+    flow: implicit
+    scopes:
+      'read:products': read all products 
+      'write:products': modify products      
+      'write:wishlist': modify your wishlist
+      'read:wishlist': read your wishlist
+      'read:reviews': read all reviews
+      'write:reviews': write reviews
+      'read:reviews:stats': read review statistics
+      'read:users': read users
+      'write:users': modify users
