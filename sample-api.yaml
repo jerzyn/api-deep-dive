@@ -1,14 +1,15 @@
 swagger: '2.0'
 info:
-  version: '3.0.0'
-  title: "API Workshop - Deep Dive"
+  version: '1.0.0'
+  title: "[Onboarding] Adidas Wishlist API"
   contact:
-    name: Andrzej Evangelist
-    url: github.com/jerzyn
-    email: andrzej.jarzyna@adidas.com
+      name: "Andrzej Jarzyna"
+      email: "andrzej.jarzyna@adidas.com"
+
+  # TODO: Update contact details
 
   description: |
-    A Simple adidas product API for the On-Boarding hackathon.
+    A Simple adidas product API for the On-Boarding deep-dive.
     [On-Boarding trainings](https://tools.adidas-group.com/confluence/display/DSBP/Engineers+On-Boarding+trainings) hackathon
 
     ## Affordances
@@ -26,54 +27,77 @@ info:
     - Delete a specific product from the wishlist
     - Clear the wishlist
 
-# Add contact information. Refer to the OpenAPI Specification for version 2.0 (https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
-
+# What are the mime types the API can return (https://tools.ietf.org/html/rfc6838#section-4.2.8)
 produces:
   - application/hal+json      # Representation message format
   - application/problem+json  # Error message format
+  
+host: "example.com"
 
 schemes:
   - https
 
 securityDefinitions:
-   "API Key":
-     type: apiKey
-     in: header
-     name: Api-Key
+  oauth2:
+    type: oauth2
+    authorizationUrl: 'http://example/oauth'
+    description: |
 
-security:
-  - "API Key": []
+      There are three available roles in the application:
+
+        - Anonymous -> can log in, log out, see products, see general ratings from a product.
+        - User -> all from Anonymous + following scopes: write:wishlist, read:reviews, write:reviews.
+        - Admin -> all from Anonymous + following scopes: write:products, read:reviews, read:reviews:stats, read:users, write:users.
+    flow: implicit
+    scopes:
+      'read:products': read all products 
+      'write:products': modify products      
+      'write:wishlist': modify your wishlist
+      'read:wishlist': read your wishlist
+      'read:reviews': read all reviews
+      'write:reviews': write reviews
+      'read:reviews:stats': read review statistics
+      'read:users': read users
+      'write:users': modify users
 
 paths:
   /:
-    x-summary: API Root
+    x-summary: Wishlist
 
     get:
-      summary: Retrieve API Root
-      description: The API Root contains the initial set of link relations.
+      summary: API Root
+      description: Retrieve the API Root
+
       responses:
         200:
           description: The root of the API
           schema:
-            $ref: '#/definitions/halRoot'
+            $ref: # 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halRoot'
 
   /products:
     x-summary: List of Products
 
     get:
-      summary: Retrieve List of Products
+      summary: List of Products
+      description: Retrieve the whole list of products
       parameters:
-        - $ref: '#/parameters/offset'
-        - $ref: '#/parameters/limit'
-        # - $ref: '#/parameters/status' # TODO: define the parameter in the appropriate section
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/offsetParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/tagsParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/categoryParam'
+        # TODO - Add:
+        # limit parameter
+        # status parameter
       responses:
         200:
           description: The list of Products
-          schema:
-            $ref: '#/definitions/halProducts'
+          # TODO: the response follows the halProducts object model schema.
+      security:
+        - oauth2:
+          - 'read:products'
 
     post:
-      summary: Create a New Product
+      summary: New Product
+      description: Create a new product
       consumes:
         - application/json
       parameters:
@@ -81,42 +105,47 @@ paths:
           in: body
           description: Product to be created
           required: true
-          # Go to line 343 to define the product object model. Read the comments there are use other models as examples.
           schema:
-            $ref: '#/definitions/product'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/product'
       responses:
         201:
           description: Newly created product
           schema:
-            $ref: '#/definitions/halProduct'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halProduct'
+      security:
+        - oauth2:
+          - 'write:products'
 
-  /products/{productId}:
+  /products/{product_id}:
     x-summary: Product
 
     parameters:
-      - name: productId
+      - name: product_id
         in: path
         description: Id of the Product
         required: true
         type: string
-        x-example: '1234'
+        x-example: 'DB1124'
 
     get:
-      summary: Retrieve Product
+      summary: Get Product
       description: Retrieve product details
       responses:
         200:
           description: A particular Product
           schema:
-            $ref: '#/definitions/halProduct'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halProduct'
         404:
-          description: The request Product wasn't found
+          description: The requested Product wasn't found
           headers:
             Content-Type:
               type: string
               default: application/problem+json
           schema:
-            $ref: '#/definitions/productNotFound'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/productNotFound'
+      security:
+        - oauth2:
+          - 'read:products'
 
     patch:
       summary: Update Product
@@ -126,33 +155,67 @@ paths:
       parameters:
         - name: Product
           in: body
-          description: Partial product update
+          description: Partial Product update
           required: true
           schema:
-            $ref: '#/definitions/productPatch'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/productPatch'
       responses:
         200:
           description: The Product was updated
           schema:
-            $ref: '#/definitions/halProduct'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halProduct'
+      security:
+        - oauth2:
+          - 'write:products'
 
-    delete:
-      summary: Delete Product
-      produces: []
+  /products/{product_id}/reviews:
+
+    x-summary: List of Product Reviews
+
+    parameters:
+      - name: product_id
+        in: path
+        description: Id of the Product
+        required: true
+        type: string
+        x-example: 'DB1124'
+
+    get:
+      summary: List product reviews
+      description: Retrieve a list of product reviews
+      parameters:
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/offsetParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/limitParam'
       responses:
-        204:
-          description: The Product was deleted
-  
-  # Add a product review endpoint. This endpoint will have:
-  #  - a method to retrieve a list of product reviews which can be filtered by the pagination offset and a nummber of items per page
-  #  - a method to create a product review which will accept a review as a parameter
-  # Please reuse the defined parameters and object models.
-  # Remember, that the HTTP code for creating and retrieving resources is different. Also take into account fact, that certain user information is created on the server side after receiving user data. What is the implication of that?
-  # -------------------------------------------------------------------------------------------
-  # /products/{productId}/reviews:
+        200:
+          description: The list of Product review
+          schema:
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halReviews'
+      security:
+        - oauth2:
+          - 'read:reviews'
 
-  
-  # -------------------------------------------------------------------------------------------
+    post:
+      summary: Create product review
+      description: Create a new product review
+      consumes:
+        - application/json
+      parameters:
+        - name: Review
+          in: body
+          description: Review to be created
+          required: true
+          schema:
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/review'
+      responses:
+        201:
+          description: Newly created product
+          schema:
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halReview'
+      security:
+        - oauth2:
+          - 'write:reviews'
+
   /products/{product_id}/reviews-stats:
 
     x-summary: List of Product Reviews Stats
@@ -169,541 +232,72 @@ paths:
       summary: List product reviews stats
       description: Retrieve a list of product reviews statistics
       parameters:
-        - name: offset
-          in: query
-          description: Number of results to skip from the start of the list
-          required: false
-          type: string
-          default: '0'
-          x-example: '10'
-        - name: limit
-          in: query
-          description: The maximum number of reusults to return
-          required: false
-          type: string
-          default: '10'
-          x-example: '5'
-        - name: granularity
-          in: query
-          type: string
-          enum:
-            - years
-            - months
-            - days
-          default: months
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/offsetParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/limitParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/granularityParam'
       responses:
         200:
           description: The list of Product review
           schema:
-            $ref: '#/definitions/halReviewsStats'
-  # -------------------------------------------------------------------------------------------
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halReviewsStats'
+      security:
+        - oauth2:
+          - 'read:reviews:stats'
 
-  # Add a new API definition for collection of users. This collection will allow to add a new item into it. The user data is a JSON object. 
-  # -------------------------------------------------------------------------------------------
-  # /users:
-  
-  # Add a new endpoint for operations on a specific user. This endpoint will require a parameter in it's path. Please define this parameter below. Remember, that the parameter's name has to relate to the one put in the path above. Don't forget about setting its type.
-  # This endpoint will allow to retrieve specific user's information. User's data is immutable and permanent.
-  # -------------------------------------------------------------------------------------------
-  # /users/{userId}:
-  
-  # Add an endpoint for operations on a user's wishlist. The operations allowed are retrieving the wishlist, clearing it, adding a new product on the list and deleting a specific product from it. 
-  # Is this going to be one endpoint, two or more? 
-  # How are you going to clear the wishlist?
-  # Remember, that you already have a list of products. Wishlist should contain only the products already defined. 
-  # -------------------------------------------------------------------------------------------
+  /users:
+    x-summary: Users
 
-parameters:
-  # adidas API guidelines: Pagination
-  offset:
-    name: offset
-    in: query
-    description: Number of results to skip from the start of the list
-    required: false
-    type: string
-    default: '0'
-    x-example: '10'
+    # TODO: Create a post operation for creating a new user. Remember about summary and description fields. The API will consume a JSON file. In the body you will be sending a user object. This parameter is required. A successful operation returns an appropriate HTML response code and contains hypermedia information. The security protocol is oauth2 and the requester needs write rights on the user.
 
-  # adidas API guidelines: Pagination
-  limit:
-    name: limit
-    in: query
-    description: The maximum number of reusults to return
-    required: false
-    type: string
-    default: '10'
-    x-example: '5'
+  /users/{user_id}:
 
-  # adidas API guidelines: Sparse fieldset
-  fields:
-    name: fields
-    in: query
-    description: Comma-separated list of fields to include in the response
-    required: false
-    type: array
-    items:
-      type: string
-    collectionFormat: csv
-    x-example:
-      - articleNumber
-      - modelNumber
-
-  # adidas API guidelines: Sparse fieldset
-  embedded:
-    name: embedded
-    in: query
-    description: Comma-separated list of resource (relations) to embed in the response
-    required: false
-    type: array
-    items:
-      type: string
-    collectionFormat: csv
-    x-example:
-      - prices
-      - assets
-
-  # TODO: define the 'status' parameter. Follow examples above
-  # status:
-  #   name: status
-
-definitions:
-  #
-  # API Root
-  #
-  halRoot:
-    type: object
-    allOf:
-      - $ref: '#/definitions/halResource'
-    example:
-      _links:
-        self:
-          href: /
-        products:
-          href: /products
-
-  #
-  # Products Resource
-  #
-  halProducts:
-    type: object
-    allOf:
-      - $ref: '#/definitions/halResource'
-    example:
-      _links:
-        self:
-          href: /products
-
-        create:
-          href: /products
-
-        next:
-          href: /products?offset=5&limit=5
-
-        first:
-          href: /products?offset=0&limit=5
-
-        last:
-          href: /products?offset=40&limit=5
-
-      _embedded:
-        product:
-          - $ref: '#/definitions/halProduct/example'
-
-  #
-  # Product Resource
-  #
-
-  # HAL Wrapper
-  halProduct:
-    type: object
-    allOf:
-      - $ref: '#/definitions/halResource'
-      - $ref: '#/definitions/product'
-    example:
-      _links:
-        self:
-          href: /products/1234
-
-        edit:
-          href: /products/1234
-
-        delete:
-          href: /products/1234
-
-        profile:
-          href: https://adidas-group.com/gdm/OMS
-
-      productNumber: 1234
-      itemCount: 42
-      status: pending
-
-  # Partial product update
-  productPatch:
-    type: object
-    allOf:
-      - $ref: '#/definitions/product'
-    example:
-      status: unavailable
-
-  # Product
-  # Define the product object. This object has 6 properties: title, description, category, image, status and tags. The first 4 are simple strings. Status is a string which can have one of 4 values: available, pending, sold and out. Tags is an arrays of strings. Title, description and category are requiered parameters.
-  # Extra task - try adding an example. This will be handy for mocking later.
-  # product:
-  # --------------------------------------------------------------------------
-
-  # Product Not Found Error
-  productNotFound:
-    type: object
-    allOf:
-      - $ref: '#/definitions/problemDetail'
-    example:
-      title: 'Not Found'
-      detail: 'Cannot find the requested product'
-      status: 404
-      instance: '/products/1234'
-
-  # Reviews list
-  halReviews:
-    type: object
-    properties:
-      reviewCount:
-        type: number
-      averageRating:
-        type: number
-    allOf:
-      - $ref: '#/definitions/halResource'
-    example:
-      _links:
-        self:
-          href: /products/{productId}/reviews
-          templated: true
-
-        create:
-          href: /products/{productId}/reviews
-          templated: true
-
-        next:
-          href: /products/{productId}/reviews?offset=5&limit=5
-          templated: true
-
-        first:
-          href: /products/{productId}/reviews?offset=0&limit=5
-          templated: true
-
-        last:
-          href: /products/{productId}/reviews?offset=40&limit=5
-          templated: true
-
-      _embedded:
-        reviewCount: 122
-        averageRating: 4.3
-        review:
-          - $ref: '#/definitions/halReview/example'
-
-  # Review body
-  review:
-    type: object
-    properties:
-      comment:
+    parameters:
+      - name: user_id
+        in: path
+        description: Id of the User
+        required: true
         type: string
-      rating:
-        type: number
-    required:
-      - comment
-      - rating
-    example:
-      comment: 'This is a review comment example'
-      rating: 4.3
+        x-example: 'xxxxx'
 
-  # HAL Single review
-  halReview:
-    type: object
-    properties:      
-      id:
+    get:
+      summary: User Profile
+      description: Retrieve user profile details
+      responses:
+        200:
+          description: A particular User Profile
+          schema:
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halUser'
+      security:
+        - oauth2:
+          - 'read:users'
+
+
+  # TODO: Create an endpoint for user's wishlist. It will have a method for retrieving it, method for adding a product to it and a method to clear the wishlist (you can clear it in two ways which are semantically correct). Remember about sending at least one path parameter for all of those requests. Which response codes are appropriate for each of the requests?
+
+  /users/{user_id}/wishlist/{product_id}:
+    x-summary: User Product Wishlist
+
+    parameters:
+      - name: user_id
+        in: path
+        description: Id of the User
+        required: true
         type: string
-      createdAt:
+        x-example: '32312'
+
+      - name: product_id
+        in: path
+        description: Id of the Product
+        required: true
         type: string
-    allOf:
-      - $ref: '#/definitions/halResource'
-      - $ref: '#/definitions/review'
-    example:
-      _links:
-        self:
-          href: /products/{productId}/reviews
-          templated: true
-      id: 'DB1124'
-      comment: 'This is a review comment example'
-      rating: 4.3
-      createdAt: '2017-06-21T14:07:17Z'
-
-  # Review Stats Resource
-  halReviewsStats:
-    type: object
-    properties:
-      reviewCount:
-        type: number
-      averageRating:
-        type: number
-    allOf:
-      - $ref: '#/definitions/halResource'
-    example:
-      _links:
-        self:
-          href: /products/{productId}/reviews-stats
-          templated: true
-
-        next:
-          href: /products/{productId}/reviews-stats?offset=5&limit=5
-          templated: true
-
-        first:
-          href: /products/{productId}/reviews-stats?offset=0&limit=5
-          templated: true
-
-        last:
-          href: /products/{productId}/reviews-stats?offset=40&limit=5
-          templated: true
-
-      _embedded:
-        reviewCount: 122
-        averageRating: 4.3
-        history:
-          - $ref: '#/definitions/halReviewStatsItem'
-
-  # HAL Wrapper
-  halReviewStatsItem:
-    type: object
-    allOf:
-      - $ref: '#/definitions/halResource'
-      - $ref: '#/definitions/reviewStatsItem'
-    example:
-      date: '2017-06-21T14:07:17Z'
-      rating: 4.3
-
-  # Review Stats
-  reviewStatsItem:
-    type: object
-    properties:
-      comment:
-        type: string
-      rating:
-        type: number
-    required:
-      - comment
-      - rating
-    example:
-      comment: 'This is a review comment example'
-      rating: 4.3
-
-  # HAL Wrapper
-  halUser:
-    type: object
-    properties:
-      createdAt:
-          type: string
-      id: 
-          type: string
-    allOf:
-      - $ref: '#/definitions/halResource'
-      - $ref: '#/definitions/user'
-    example:
-      _links:
-        self:
-          href: /users/{userId}
-          templated: true
-      id: '232333'
-      username: 'Sam'
-      createdAt: '2017-06-21T14:07:17Z'
-
-  # Review
-  user:
-    type: object
-    properties:
-      username:
-        type: string
-      password:
-        type: string
-    required:
-      - username
-      - password
-    example:
-      username: 'Sam'
-      password: 'adidas123'
-
-  # User Not Found Error
-  userNotFound:
-    type: object
-    allOf:
-      - $ref: '#/definitions/problemDetail'
-    example:
-      title: 'Not Found'
-      detail: 'Cannot find any user with this id'
-      status: 404
-      instance: '/users/{userId}'
-
-  halWishlist:
-    type: object
-    properties:
-      wishlistCount:
-        type: number
-    allOf:
-      - $ref: '#/definitions/halResource'
-    example:
-      _links:
-        self:
-          href: /users/{userId}/wishlist
-          templated: true
-
-        create:
-          href: /users/{userId}/wishlist
-          templated: true
-
-        next:
-          href: /users/{userId}/wishlist?offset=5&limit=5
-          templated: true
-
-        first:
-          href: /users/{userId}/wishlist?offset=0&limit=5
-          templated: true
-
-        last:
-          href: /users/{userId}/wishlist?offset=40&limit=5
-          templated: true
-
-      _embedded:
-        wishlistCount: 122
-        wishlist:
-          - $ref: '#/definitions/halWishProduct/example'
-
-  # HAL Wrapper
-  halWishProduct:
-    type: object
-    allOf:
-      - $ref: '#/definitions/halResource'
-      - $ref: '#/definitions/wishProduct'
-    example:
-      _links:
-        self:
-          href: /products/{productId}
-          templated: true
-      id: 'DB1124'
-      createdAt: '2017-06-21T14:07:17Z'
-
-
-  # Review
-  wishProduct:
-    type: object
-    properties:
-      id:
-        type: string
-      createdAt:
-        type: string
-        readOnly: true
-    required:
-      - id
-    example:
-      id: 'DB1124'
-      createdAt: '2017-06-21T14:07:17Z'
-
-  #
-  # -- DO NOT EDIT BEYOND THIS POINT --
-  #
-
-  # Media Types Definitions
-
-  #
-  # application/problem+json
-  #
-  problemDetail:
-    type: object
-    properties:
-      type:
-        type: string
-      title:
-        type: string
-      status:
-        type: number
-      detail:
-        type: string
-      instance:
-        type: string
-    required:
-      - title
-      - detail
-
-  #
-  # application/hal+json defintion
-  #
-  halLinkObject:
-    type: object
-    required:
-      - href
-    properties:
-      href:
-        type: string
-      templated:
-        type: boolean
-      #
-      # WARN: Some version of OAS parser can have problem with property being called "type"
-      # resulting in the error 'Schema "type" key must be a string'.
-      #
-      # For this reason we have commented out the "type" property of the link object.
-      # See https://tools.ietf.org/html/draft-kelly-json-hal-08#section-5.3 for the definiton of
-      # HAL's link object type property.
-      #
-      # type:
-      #  type: string
-      deprecation:
-        type: string
-      name:
-        type: string
-      profile:
-        type: string
-      title:
-        type: string
-      hreflang:
-        type: string
-
-  halCuriesLink:
-    title: HAL Curies Link
-    allOf:
-      - type: object
-        properties:
-          templated:
-            enum:
-              - true
-        required:
-          - templated
-      - $ref: '#/definitions/halLinkObject'
-
-  halResource:
-    title: HAL Resource Object
-    type: object
-    properties:
-      _links:
-        type: object
-        additionalProperties:
-          # WARN: Should be "anyOf" but "anyOf" isn't supported in Swagger 2.0
-          allOf:
-            - $ref: '#/definitions/halLinkObject'
-            - type: array
-              items:
-                - $ref: '#/definitions/halLinkObject'
-        properties:
-          curies:
-            # WARN: Should be "anyOf" but "anyOf" isn't supported in Swagger 2.0
-            allOf:
-              - $ref: '#/definitions/halCuriesLink'
-              - type: array
-                items:
-                  - $ref: '#/definitions/halCuriesLink'
-      _embedded:
-        type: object
-        additionalProperties: true
-        # WARN: Apiary doesn't support circular references
-        # additionalProperties:
-        #   anyOf:
-        #     - $ref: '#/definitions/hal_resource'
-        #     - type: array
-        #       items:
-        #         - $ref: '#/definitions/hal_resource'
+        x-example: 'DB1124'
+        
+    delete:
+      summary: Delete a product from the wishlist
+      description: Delete a product from user wishlist
+      responses:
+        204:
+          description: Wishlist cleared
+      security:
+        - oauth2:
+          - 'write:wishlist'
