@@ -2,6 +2,11 @@ swagger: '2.0'
 info:
   version: '3.0.0'
   title: "API Workshop - Deep Dive"
+  contact:
+    name: Andrzej Evangelist
+    url: github.com/jerzyn
+    email: andrzej.jarzyna@adidas.com
+
   description: |
     A Simple adidas product API for the On-Boarding hackathon.
     [On-Boarding trainings](https://tools.adidas-group.com/confluence/display/DSBP/Engineers+On-Boarding+trainings) hackathon
@@ -341,7 +346,7 @@ definitions:
       status: unavailable
 
   # Product
-  # Define the product object. This object has 6 properties: title, description, category, image, status and tags. The first 4 are simple strings. Status is a string which can have one of 3 values: available, pending, sold and out. Tags is an arrays of strings. Title, description and category are requiered parameters.
+  # Define the product object. This object has 6 properties: title, description, category, image, status and tags. The first 4 are simple strings. Status is a string which can have one of 4 values: available, pending, sold and out. Tags is an arrays of strings. Title, description and category are requiered parameters.
   # Extra task - try adding an example. This will be handy for mocking later.
   # product:
   # --------------------------------------------------------------------------
