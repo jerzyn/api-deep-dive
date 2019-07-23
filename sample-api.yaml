@@ -6,7 +6,7 @@ info:
       name: "Andrzej Jarzyna"
       email: "andrzej.jarzyna@adidas.com"
 
-  # TODO: Update contact details
+  # TODO: Update contact details and change the title to include your name.
 
   description: |
     A Simple adidas product API for the On-Boarding deep-dive.
