@@ -1,14 +1,13 @@
 # API Design Workshop
 
-
 ## Requirements
 
 - Read [Adidas API Guidelines](https://adidas.gitbook.io/api-guidelines)
 - Git
 - Code editor (e.g. [VS Code](https://code.visualstudio.com))
-    * in case you are using VS Code, install extensions such as `openapi-lint`, `openapi-viewer` and `YAML`
-- [Apiary](https://apiary.io) account within adidas group.
-- [Swagger Editor](https://editor.swagger.io) For visualising and validating your specification.
+    * in case you are using VS Code, install extensions such as `openapi-lint` and `YAML`
+- Swaggerhub account within adidas group (create an account and request access to it)
+- [Spectral](https://github.com/stoplightio/spectral) for local and ci/cd validations.
 
 ## Design challenge
 
@@ -40,7 +39,7 @@ The existing core Product API provides this affordances:
 
 ## Step2. Formalize the design in the [Open API Specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
 
-> The OAS (Open API Specification) file can be edited in whatever tool you like *BUT NOT GENERATED FROM YOUR CODE*. We suggest either using [Swagger Editor](https://editor.swagger.io) or VS Code with extensions. The most important thing is that the final one (the contract) *MUST* be in Apiary.
+> The OAS (Open API Specification) file can be edited in whatever tool you like *BUT NOT GENERATED FROM YOUR CODE*. We suggest either using the internal editor in Swaggerhub or VS Code with extensions. The most important thing is that the final one (the contract) *MUST* be in Swaggerhub.
 
 **TASK**: Extend the existing `sample-api.yaml`. First change the filename into a name of your project. 
 
@@ -48,9 +47,9 @@ We will walk step by step through the file explaining each of the different elem
 
 _NOTE:_ Remember to validate your API specification after each exercise (step) completed.
 
-## Step3. Verify the design using Apiary Documentation and Apiary Mock Service
+## Step3. Verify the design using Swaggerhub Documentation and Swaggerhub Auto-Mocking Service
 
-**TASK**: Put your API contract into a new Apiary project. Check the validation. Does your API comply with the rules? If yes, try the Apiary Mock Service.
+**TASK**: Put your API contract into a new Swaggerhub API under a project. Put models in a Domain in Swaggerhub. Reference the models from the domain in your API. Check the validation. Does your API comply with the rules? If yes, try the Apiary Mock Service.
 
 ## Step4. Review the API Design
 
