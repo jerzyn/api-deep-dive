@@ -15,6 +15,7 @@ info:
     ## Affordances
     This API affords the following actions:
     - Retrieve the list of products
+    - Retrieve the metadata related to products (tags, status, categories)
     - Retrieve a single product
     - Create a product
     - Update an existing product (status...)
@@ -92,7 +93,17 @@ paths:
       security:
         - oauth2:
           - 'write:products'
-
+          
+  /products/metadata:
+    get:
+      summary: Retrieve Products Metadata
+      description: Retrieve all products metadata
+      responses:
+        '200':
+          description: 'All products metadata (categories, status, tags)'
+          schema:
+            $ref: 'https://design.api.3stripes.io/v1/domains/adidas/wishlist-models/1.0.0#/definitions/halProductMetadata'
+            
   /products/{product_id}:
     x-summary: Product
 
