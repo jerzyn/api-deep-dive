@@ -1,0 +1,51 @@
+// Product
+{
+  "id": "DB1124",
+  "title": "My Product title",
+  "description": "An example of a product description",
+  "category": "lorem",
+  "status": "out",
+  "images": [
+    "https://cdn.sportsshoes.com/product/A/ADI8522/ADI8522_200_1.jpg"
+  ],
+  "tags": [
+    "beyond",
+    "zapitilla",
+    "zaragoza"
+  ]
+}
+
+// User
+{
+    "username": "Sam"
+}
+
+// Review
+
+{
+    "comment": "This is a review comment example",
+    "rating": 4.3
+}
+
+// Wishlist 
+
+{
+    "_embedded": {
+        "wishlistCount:": 23,
+        "wishlist": [
+            {
+                "productId": "DB1124",
+                "_links": {
+                    "self": ""
+                }
+            },
+            {
+                "productId": "DB1125",
+                "_links": {
+                    "self": ""
+                }
+            }
+        ]
+    }
+}
+  
