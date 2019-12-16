@@ -21,6 +21,7 @@ The existing core Product API provides this affordances:
 
 - Retrieve the list of products
 - Retrieve a single product
+- Retrieve the metadata related to products (tags, status, categories)
 - Create a product
 - Update an existing product (status...)
 - Retrieve reviews about a product
