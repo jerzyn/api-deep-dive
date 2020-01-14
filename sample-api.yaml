@@ -50,7 +50,7 @@ paths:
         200:
           description: The root of the API
           schema:
-            $ref: # 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halRoot'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/halRoot'
 
   /products:
     x-summary: List of Products
@@ -59,9 +59,9 @@ paths:
       summary: List of Products
       description: Retrieve the whole list of products
       parameters:
-        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/offsetParam'
-        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/tagsParam'
-        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/categoryParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/parameters/offsetParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/parameters/tagsParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/parameters/categoryParam'
         # TODO - Add:
         # limit parameter
         # status parameter
@@ -84,12 +84,12 @@ paths:
           description: Product to be created
           required: true
           schema:
-            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/product'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/product'
       responses:
         201:
           description: Newly created product
           schema:
-            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halProduct'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/halProduct'
       security:
         - oauth2:
           - 'write:products'
@@ -122,7 +122,7 @@ paths:
         200:
           description: A particular Product
           schema:
-            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halProduct'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/halProduct'
         404:
           description: The requested Product wasn't found
           headers:
@@ -130,7 +130,7 @@ paths:
               type: string
               default: application/problem+json
           schema:
-            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/productNotFound'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/productNotFound'
       security:
         - oauth2:
           - 'read:products'
@@ -146,12 +146,12 @@ paths:
           description: Partial Product update
           required: true
           schema:
-            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/productPatch'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/productPatch'
       responses:
         200:
           description: The Product was updated
           schema:
-            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halProduct'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/halProduct'
       security:
         - oauth2:
           - 'write:products'
@@ -172,13 +172,13 @@ paths:
       summary: List product reviews
       description: Retrieve a list of product reviews
       parameters:
-        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/offsetParam'
-        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/limitParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/parameters/offsetParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/parameters/limitParam'
       responses:
         200:
           description: The list of Product review
           schema:
-            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halReviews'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/halReviews'
       security:
         - oauth2:
           - 'read:reviews'
@@ -194,12 +194,12 @@ paths:
           description: Review to be created
           required: true
           schema:
-            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/review'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/review'
       responses:
         201:
           description: Newly created product
           schema:
-            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halReview'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/halReview'
       security:
         - oauth2:
           - 'write:reviews'
@@ -220,14 +220,14 @@ paths:
       summary: List product reviews stats
       description: Retrieve a list of product reviews statistics
       parameters:
-        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/offsetParam'
-        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/limitParam'
-        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/parameters/granularityParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/parameters/offsetParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/parameters/limitParam'
+        - $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/parameters/granularityParam'
       responses:
         200:
           description: The list of Product review
           schema:
-            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halReviewsStats'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/halReviewsStats'
       security:
         - oauth2:
           - 'read:reviews:stats'
@@ -254,7 +254,7 @@ paths:
         200:
           description: A particular User Profile
           schema:
-            $ref: 'http://design.api.3stripes.io/v1/domains/adidas_Org/onboarding-wishlist-models/1.0.0#/definitions/halUser'
+            $ref: 'http://design.api.3stripes.io/v1/domains/adidas/onboarding-wishlist-models/1.0.0#/definitions/halUser'
       security:
         - oauth2:
           - 'read:users'
